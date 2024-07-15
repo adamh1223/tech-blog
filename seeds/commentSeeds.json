@@ -1,0 +1,12 @@
+[
+  {
+    "content": "First comment on First Post",
+    "user_id": 2,
+    "blogpost_id": 1
+  },
+  {
+    "content": "First comment on Second Post",
+    "user_id": 1,
+    "blogpost_id": 2
+  }
+]
