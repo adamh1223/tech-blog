@@ -1,38 +1,67 @@
 const router = require("express").Router();
-const { Comment } = require("../../Models");
+const { Comment, User, BlogPost } = require("../Models/index");
 
-// Get all comments
+// GET all comments
 router.get("/", async (req, res) => {
   try {
-    const comments = await Comment.findAll();
-    res.status(200).json(comments);
+    const commentsData = await Comment.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ["user_name"],
+        },
+        {
+          model: BlogPost,
+          attributes: ["title"],
+        },
+      ],
+    });
+    res.status(200).json(commentsData);
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
   }
 });
 
-// Get a comment by ID
+// GET a single comment by id
 router.get("/:id", async (req, res) => {
   try {
-    const comment = await Comment.findByPk(req.params.id);
-    if (!comment) {
+    const commentData = await Comment.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          attributes: ["user_name"],
+        },
+        {
+          model: BlogPost,
+          attributes: ["title"],
+        },
+      ],
+    });
+
+    if (!commentData) {
       res
         .status(404)
-        .json({ message: `No comment found with ID: ${req.params.id}` });
+        .json({ message: `No comment found with id ${req.params.id}.` });
       return;
     }
-    res.status(200).json(comment);
+
+    res.status(200).json(commentData);
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
   }
 });
 
-// Create a new comment
+// CREATE a new comment
 router.post("/", async (req, res) => {
   try {
-    const newComment = await Comment.create(req.body);
+    const newComment = await Comment.create({
+      content: req.body.content,
+      user_id: req.body.user_id,
+      blogpost_id: req.body.blogpost_id,
+    });
+
     res.status(201).json(newComment);
   } catch (err) {
     console.error(err);
@@ -40,7 +69,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update a comment by ID
+// UPDATE a comment by id
 router.put("/:id", async (req, res) => {
   try {
     const updatedComment = await Comment.update(req.body, {
@@ -48,20 +77,22 @@ router.put("/:id", async (req, res) => {
         id: req.params.id,
       },
     });
+
     if (updatedComment[0] === 0) {
       res
         .status(404)
-        .json({ message: `No comment found with ID: ${req.params.id}` });
+        .json({ message: `No comment found with id ${req.params.id}.` });
       return;
     }
-    res.status(200).json({ message: "Comment updated successfully" });
+
+    res.status(200).json({ message: "Comment updated successfully." });
   } catch (err) {
     console.error(err);
     res.status(400).json(err);
   }
 });
 
-// Delete a comment by ID
+// DELETE a comment by id
 router.delete("/:id", async (req, res) => {
   try {
     const deletedComment = await Comment.destroy({
@@ -69,13 +100,15 @@ router.delete("/:id", async (req, res) => {
         id: req.params.id,
       },
     });
+
     if (!deletedComment) {
       res
         .status(404)
-        .json({ message: `No comment found with ID: ${req.params.id}` });
+        .json({ message: `No comment found with id ${req.params.id}.` });
       return;
     }
-    res.status(200).json({ message: "Comment deleted successfully" });
+
+    res.status(200).json({ message: "Comment deleted successfully." });
   } catch (err) {
     console.error(err);
     res.status(500).json(err);

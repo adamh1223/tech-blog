@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
 // Import controllers
-const userRoutes = require("../Controller/userRoutes");
-const blogPostRoutes = require("../Controller/blogPostRoutes");
-const commentRoutes = require("../Controller/commentRoutes");
+const userRoutes = require("./userRoutes");
+const blogPostRoutes = require("./blogPostRoutes");
+const commentRoutes = require("./commentRoutes");
 
 // Define routes
 router.use("/users", userRoutes);
