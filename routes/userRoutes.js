@@ -1,9 +1,15 @@
 const router = require("express").Router();
 const { User } = require("../Models");
+const bcrypt = require("bcrypt");
 
 router.post("/signup", async (req, res) => {
   try {
-    const user = await User.create(req.body);
+    // Hash the password before saving the user
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = await User.create({
+      ...req.body,
+      password: hashedPassword,
+    });
     req.session.save(() => {
       req.session.user_id = user.id;
       req.session.logged_in = true;
@@ -26,7 +32,10 @@ router.post("/login", async (req, res) => {
       return;
     }
 
-    const validPassword = await user.checkPassword(req.body.user_password);
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
 
     if (!validPassword) {
       res.status(400).json({ message: "Incorrect password" });

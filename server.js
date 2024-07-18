@@ -1,6 +1,6 @@
 const express = require("express");
 const session = require("express-session");
-const exphbs = require("express-handlebars");
+const { engine } = require("express-handlebars");
 const path = require("path");
 
 // Database connection
@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3001;
 
 // Session setup
 const sess = {
-  secret: process.env.SESSION_SECRET || "supersecretsecret",
+  secret: process.env.SESSION_SECRET,
   cookie: { maxAge: 3600000 }, // Session expires after 1 hour of inactivity
   resave: false,
   saveUninitialized: true,
@@ -21,7 +21,7 @@ const sess = {
 app.use(session(sess));
 
 // Handlebars middleware
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine("handlebars", engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Body Parser Middleware
