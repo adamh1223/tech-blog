@@ -1,10 +1,10 @@
-<h2>Your Blog Posts</h2>
+<div class="postsContainer mx-5">
+  <h2>Your Blog Posts:</h2>
 <ul>
   {{#each blogPosts}}
   <li>
     <h3>{{title}}</h3>
     <p>{{content}}</p>
-    <a href="/dashboard/{{id}}/edit">Edit</a> | <a href="/api/blogposts/{{id}}" data-method="DELETE">Delete</a>
   </li>
   {{else}}
   <li>No blog posts found.</li>
@@ -12,10 +12,14 @@
 </ul>
 
 <h2>Add New Blog Post</h2>
-<form action="/api/blogposts" method="POST">
+<form method="POST" id="postform">
   <label for="title">Title:</label><br>
   <input type="text" id="title" name="title"><br>
   <label for="content">Content:</label><br>
   <textarea id="content" name="content" rows="4" cols="50"></textarea><br>
-  <button type="submit">Create Post</button>
+  <button type="submit" class="btn btn-primary">Create Post</button>
 </form>
+</div>
+
+
+<script src="/js/dashboard.js"></script>

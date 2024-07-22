@@ -21,8 +21,11 @@ router.get("/dashboard", async (req, res) => {
   const blogPostData = await BlogPost.findAll({
     include: [{ model: User, attributes: ["name"] }, { model: Comment }],
   });
+  const blogPosts = blogPostData.map((blogPost) => {
+    return blogPost.get({ plain: true });
+  });
   res.render("dashboard", {
-    blogPosts: blogPostData,
+    blogPosts: blogPosts,
     logged_in: req.session.logged_in,
   });
 });

@@ -6,12 +6,12 @@ const BlogPost = require("./BlogPost");
 const Comment = require("./Comment");
 
 BlogPost.belongsTo(User, {
-  foreignKey: "id",
+  foreignKey: "user_id",
   onDelete: "cascade",
 });
 
 BlogPost.hasMany(Comment, {
-  foreignKey: "id",
+  foreignKey: "post_id",
   onDelete: "cascade",
 });
 

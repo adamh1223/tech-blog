@@ -10,10 +10,11 @@ router.post("/signup", async (req, res) => {
       ...req.body,
       password: req.body.password,
     });
+    const userPlain = user.get({ plain: true });
     req.session.save(() => {
-      req.session.id = user.id;
+      req.session.user_id = userPlain.id;
       req.session.logged_in = true;
-      res.status(200).json(user);
+      res.status(200).json(userPlain);
     });
   } catch (err) {
     console.log(err);
@@ -44,8 +45,10 @@ router.post("/login", async (req, res) => {
       return;
     }
 
+    const userPlain = user.get({ plain: true });
+    console.log("userPlain:", userPlain);
     req.session.save(() => {
-      req.session.id = user.id;
+      req.session.user_id = userPlain.id;
       req.session.logged_in = true;
       res.status(200).json({ user, message: "Logged in successfully" });
     });
