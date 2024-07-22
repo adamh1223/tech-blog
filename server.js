@@ -1,42 +1,42 @@
+const path = require("path");
 const express = require("express");
 const session = require("express-session");
-const { engine } = require("express-handlebars");
-const path = require("path");
+const exphbs = require("express-handlebars");
+const routes = require("./routes");
+const helpers = require("./utils/helpers");
 
-// Database connection
 const sequelize = require("./config/connection");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-// Initialize Express
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Session setup
+// Set up Handlebars.js engine with custom helpers
+const hbs = exphbs.create({ helpers });
+
 const sess = {
-  secret: process.env.SESSION_SECRET,
-  cookie: { maxAge: 3600000 }, // Session expires after 1 hour of inactivity
+  secret: "Super secret secret",
+  cookie: {},
   resave: false,
   saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize,
+  }),
 };
 
 app.use(session(sess));
 
-// Handlebars middleware
-app.engine("handlebars", engine({ defaultLayout: "main" }));
+// Inform Express.js on which template engine to use
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
-// Body Parser Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Set static folder
 app.use(express.static(path.join(__dirname, "public")));
 
-// Routes
-app.use("/", require("./routes"));
+app.use(routes);
 
-// Sync Sequelize models and start server
+// Sync the models with the database
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () =>
-    console.log(`Server started on http://localhost:${PORT}`)
-  );
+  app.listen(PORT, () => console.log(`Now listening on port ${PORT}`));
 });

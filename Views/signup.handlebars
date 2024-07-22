@@ -1,0 +1,35 @@
+<!-- views/signup.handlebars -->
+<header class="display-flex justify-space-between align-center">
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-lg-0"></ul>
+    </div>
+  </nav>
+</header>
+<section class="text-center">
+  <div class="container d-flex justify-content-center mb-3">
+    <form class="pt-5 login form login-form d-flex flex-column align-items-center" id="signUpForm">
+      <div class="text-center visually-hidden" id="displayError"></div>
+      <div class="form-group">
+        <h1 for="exampleInputEmail1" class="my-2 text-center fw-bolder">Create Account</h1>
+        <label>Your name</label>
+        <input type="text" class="form-control my-2 email" id="create-name" aria-describedby="emailHelp" placeholder="First and last name">
+        <label>Email</label>
+        <input type="email" class="form-control my-2 email" id="create-email" aria-describedby="emailHelp" placeholder="email">
+      </div>
+      <div class="form-group mb-3">
+        <label>Password</label>
+        <input type="password" class="form-control my-2 password" id="create-password" placeholder="At least 8 characters">
+        <label>Re-enter Password</label>
+        <input type="password" class="form-control my-2 password" id="re-enter-password" placeholder="Passwords must match">
+      </div>
+      <button type="submit" class="btn btn-primary">Create Account</button>
+    </form>
+  </div>
+  <div class="text-center">
+    <p>Already have an account?</p>
+    <button class="btn btn-secondary" id="login">Login</button>
+  </div>
+</section>
+
+<script src="/js/signup.js"></script>

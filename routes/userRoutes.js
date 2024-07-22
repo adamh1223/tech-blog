@@ -1,17 +1,17 @@
+// routes/userRoutes.js
 const router = require("express").Router();
 const { User } = require("../Models");
 const bcrypt = require("bcrypt");
 
 router.post("/signup", async (req, res) => {
   try {
-    // Hash the password before saving the user
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    //const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = await User.create({
       ...req.body,
-      password: hashedPassword,
+      password: req.body.password,
     });
     req.session.save(() => {
-      req.session.user_id = user.id;
+      req.session.id = user.id;
       req.session.logged_in = true;
       res.status(200).json(user);
     });
@@ -24,11 +24,12 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({
-      where: { user_name: req.body.user_name },
+      where: { email: req.body.email },
     });
 
     if (!user) {
       res.status(404).json({ message: "User not found" });
+      console.log("User not found");
       return;
     }
 
@@ -38,12 +39,13 @@ router.post("/login", async (req, res) => {
     );
 
     if (!validPassword) {
+      console.log("Incorrect password");
       res.status(400).json({ message: "Incorrect password" });
       return;
     }
 
     req.session.save(() => {
-      req.session.user_id = user.id;
+      req.session.id = user.id;
       req.session.logged_in = true;
       res.status(200).json({ user, message: "Logged in successfully" });
     });

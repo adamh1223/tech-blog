@@ -4,7 +4,7 @@ const { BlogPost, User, Comment } = require("../Models");
 router.get("/", async (req, res) => {
   try {
     const blogPostData = await BlogPost.findAll({
-      include: [{ model: User, attributes: ["user_name"] }, { model: Comment }],
+      include: [{ model: User, attributes: ["name"] }, { model: Comment }],
     });
     res.status(200).json(blogPostData);
   } catch (err) {
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const blogPostData = await BlogPost.findByPk(req.params.id, {
-      include: [{ model: User, attributes: ["user_name"] }, { model: Comment }],
+      include: [{ model: User, attributes: ["name"] }, { model: Comment }],
     });
 
     if (!blogPostData) {
@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
     const newBlogPost = await BlogPost.create({
       title: req.body.title,
       content: req.body.content,
-      user_id: req.session.user_id,
+      id: req.session.id,
     });
     res.status(200).json(newBlogPost);
   } catch (err) {

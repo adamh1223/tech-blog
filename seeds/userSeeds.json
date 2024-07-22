@@ -1,12 +1,14 @@
 [
   {
-    "user_name": "Dan123",
-    "user_password": "password",
-    "user_id": 1
+    "name": "Dan123",
+    "email": "dan@dan.com",
+    "password": "password",
+    "id": 1
   },
   {
-    "user_name": "Steve123",
-    "user_password": "password",
-    "user_id": 2
+    "name": "Steve123",
+    "email": "steve@steve.com",
+    "password": "password",
+    "id": 2
   }
 ]
